@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="UTF-8"?><process version="7.6.001">
+  <context>
+    <input/>
+    <output/>
+    <macros/>
+  </context>
+  <operator activated="true" class="process" compatibility="7.6.001" expanded="true" name="Process">
+    <parameter key="logverbosity" value="init"/>
+    <parameter key="random_seed" value="2001"/>
+    <parameter key="send_mail" value="never"/>
+    <parameter key="notification_email" value=""/>
+    <parameter key="process_duration_for_mail" value="30"/>
+    <parameter key="encoding" value="SYSTEM"/>
+    <process expanded="true">
+      <operator activated="true" class="read_csv" compatibility="7.6.001" expanded="true" height="68" name="Load Zoo dataset" width="90" x="45" y="238">
+        <parameter key="csv_file" value="/home/gaurav/Downloads/zoo.csv"/>
+        <parameter key="column_separators" value=","/>
+        <parameter key="trim_lines" value="false"/>
+        <parameter key="use_quotes" value="true"/>
+        <parameter key="quotes_character" value="&quot;"/>
+        <parameter key="escape_character" value="\"/>
+        <parameter key="skip_comments" value="false"/>
+        <parameter key="comment_characters" value="#"/>
+        <parameter key="parse_numbers" value="true"/>
+        <parameter key="decimal_character" value="."/>
+        <parameter key="grouped_digits" value="false"/>
+        <parameter key="grouping_character" value=","/>
+        <parameter key="date_format" value=""/>
+        <parameter key="first_row_as_names" value="false"/>
+        <list key="annotations">
+          <parameter key="0" value="Name"/>
+        </list>
+        <parameter key="time_zone" value="SYSTEM"/>
+        <parameter key="locale" value="English (United States)"/>
+        <parameter key="encoding" value="UTF-8"/>
+        <list key="data_set_meta_data_information">
+          <parameter key="0" value="animal.true.polynominal.attribute"/>
+          <parameter key="1" value="hair.true.polynominal.attribute"/>
+          <parameter key="2" value="feathers.true.polynominal.attribute"/>
+          <parameter key="3" value="eggs.true.polynominal.attribute"/>
+          <parameter key="4" value="milk.true.polynominal.attribute"/>
+          <parameter key="5" value="airborne.true.polynominal.attribute"/>
+          <parameter key="6" value="aquatic.true.polynominal.attribute"/>
+          <parameter key="7" value="predator.true.polynominal.attribute"/>
+          <parameter key="8" value="toothed.true.polynominal.attribute"/>
+          <parameter key="9" value="backbone.true.polynominal.attribute"/>
+          <parameter key="10" value="breathes.true.polynominal.attribute"/>
+          <parameter key="11" value="venomous.true.polynominal.attribute"/>
+          <parameter key="12" value="fins.true.polynominal.attribute"/>
+          <parameter key="13" value="legs.true.real.attribute"/>
+          <parameter key="14" value="tail.true.polynominal.attribute"/>
+          <parameter key="15" value="domestic.true.polynominal.attribute"/>
+          <parameter key="16" value="catsize.true.polynominal.attribute"/>
+          <parameter key="17" value="type.true.polynominal.label"/>
+        </list>
+        <parameter key="read_not_matching_values_as_missings" value="true"/>
+        <parameter key="datamanagement" value="double_array"/>
+        <parameter key="data_management" value="auto"/>
+      </operator>
+      <operator activated="true" class="set_role" compatibility="7.6.001" expanded="true" height="82" name="Set Role" width="90" x="179" y="238">
+        <parameter key="attribute_name" value="type"/>
+        <parameter key="target_role" value="label"/>
+        <list key="set_additional_roles"/>
+      </operator>
+      <operator activated="true" class="normalize" compatibility="7.6.001" expanded="true" height="103" name="Normalize" width="90" x="380" y="238">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="subset"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value="legs"/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="numeric"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="real"/>
+        <parameter key="block_type" value="value_series"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="value_series_end"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="method" value="Z-transformation"/>
+        <parameter key="min" value="0.0"/>
+        <parameter key="max" value="1.0"/>
+        <parameter key="allow_negative_values" value="false"/>
+      </operator>
+      <operator activated="true" class="nominal_to_numerical" compatibility="7.6.001" expanded="true" height="103" name="Nominal to Numerical" width="90" x="112" y="391">
+        <parameter key="return_preprocessing_model" value="false"/>
+        <parameter key="create_view" value="false"/>
+        <parameter key="attribute_filter_type" value="all"/>
+        <parameter key="attribute" value=""/>
+        <parameter key="attributes" value=""/>
+        <parameter key="use_except_expression" value="false"/>
+        <parameter key="value_type" value="nominal"/>
+        <parameter key="use_value_type_exception" value="false"/>
+        <parameter key="except_value_type" value="file_path"/>
+        <parameter key="block_type" value="single_value"/>
+        <parameter key="use_block_type_exception" value="false"/>
+        <parameter key="except_block_type" value="single_value"/>
+        <parameter key="invert_selection" value="false"/>
+        <parameter key="include_special_attributes" value="false"/>
+        <parameter key="coding_type" value="unique integers"/>
+        <parameter key="use_comparison_groups" value="false"/>
+        <list key="comparison_groups"/>
+        <parameter key="unexpected_value_handling" value="all 0 and warning"/>
+        <parameter key="use_underscore_in_name" value="false"/>
+      </operator>
+      <operator activated="true" class="concurrency:cross_validation" compatibility="7.6.001" expanded="true" height="166" name="Cross Validation" width="90" x="581" y="391">
+        <parameter key="split_on_batch_attribute" value="false"/>
+        <parameter key="leave_one_out" value="false"/>
+        <parameter key="number_of_folds" value="5"/>
+        <parameter key="sampling_type" value="automatic"/>
+        <parameter key="use_local_random_seed" value="false"/>
+        <parameter key="local_random_seed" value="1992"/>
+        <parameter key="enable_parallel_execution" value="true"/>
+        <process expanded="true">
+          <operator activated="true" class="h2o:deep_learning" compatibility="7.6.001" expanded="true" height="82" name="Deep Learning" width="90" x="45" y="34">
+            <parameter key="activation" value="Rectifier"/>
+            <enumeration key="hidden_layer_sizes">
+              <parameter key="hidden_layer_sizes" value="50"/>
+              <parameter key="hidden_layer_sizes" value="50"/>
+            </enumeration>
+            <enumeration key="hidden_dropout_ratios"/>
+            <parameter key="reproducible_(uses_1_thread)" value="false"/>
+            <parameter key="use_local_random_seed" value="false"/>
+            <parameter key="local_random_seed" value="1992"/>
+            <parameter key="epochs" value="1000.0"/>
+            <parameter key="compute_variable_importances" value="false"/>
+            <parameter key="train_samples_per_iteration" value="-2"/>
+            <parameter key="adaptive_rate" value="true"/>
+            <parameter key="epsilon" value="1.0E-8"/>
+            <parameter key="rho" value="0.99"/>
+            <parameter key="learning_rate" value="0.005"/>
+            <parameter key="learning_rate_annealing" value="1.0E-6"/>
+            <parameter key="learning_rate_decay" value="1.0"/>
+            <parameter key="momentum_start" value="0.0"/>
+            <parameter key="momentum_ramp" value="1000000.0"/>
+            <parameter key="momentum_stable" value="0.0"/>
+            <parameter key="nesterov_accelerated_gradient" value="true"/>
+            <parameter key="standardize" value="true"/>
+            <parameter key="L1" value="1.0E-5"/>
+            <parameter key="L2" value="0.0"/>
+            <parameter key="max_w2" value="10.0"/>
+            <parameter key="loss_function" value="Automatic"/>
+            <parameter key="distribution_function" value="AUTO"/>
+            <parameter key="early_stopping" value="false"/>
+            <parameter key="stopping_rounds" value="1"/>
+            <parameter key="stopping_metric" value="AUTO"/>
+            <parameter key="stopping_tolerance" value="0.001"/>
+            <parameter key="missing_values_handling" value="MeanImputation"/>
+            <parameter key="max_runtime_seconds" value="0"/>
+            <list key="expert_parameters"/>
+            <list key="expert_parameters_"/>
+          </operator>
+          <connect from_port="training set" to_op="Deep Learning" to_port="training set"/>
+          <connect from_op="Deep Learning" from_port="model" to_port="model"/>
+          <portSpacing port="source_training set" spacing="0"/>
+          <portSpacing port="sink_model" spacing="0"/>
+          <portSpacing port="sink_through 1" spacing="0"/>
+          <description align="left" color="green" colored="true" height="186" resized="true" width="569" x="31" y="14">&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; Here we train a deep learning model with a K-fold validation stratgey of k=5 and epochs = 1000.</description>
+        </process>
+        <process expanded="true">
+          <operator activated="true" class="apply_model" compatibility="7.6.001" expanded="true" height="82" name="Apply Model" width="90" x="112" y="34">
+            <list key="application_parameters"/>
+            <parameter key="create_view" value="false"/>
+          </operator>
+          <operator activated="true" class="performance_classification" compatibility="7.6.001" expanded="true" height="82" name="Performance" width="90" x="380" y="34">
+            <parameter key="main_criterion" value="first"/>
+            <parameter key="accuracy" value="true"/>
+            <parameter key="classification_error" value="true"/>
+            <parameter key="kappa" value="false"/>
+            <parameter key="weighted_mean_recall" value="false"/>
+            <parameter key="weighted_mean_precision" value="false"/>
+            <parameter key="spearman_rho" value="false"/>
+            <parameter key="kendall_tau" value="false"/>
+            <parameter key="absolute_error" value="false"/>
+            <parameter key="relative_error" value="false"/>
+            <parameter key="relative_error_lenient" value="false"/>
+            <parameter key="relative_error_strict" value="false"/>
+            <parameter key="normalized_absolute_error" value="false"/>
+            <parameter key="root_mean_squared_error" value="false"/>
+            <parameter key="root_relative_squared_error" value="false"/>
+            <parameter key="squared_error" value="false"/>
+            <parameter key="correlation" value="false"/>
+            <parameter key="squared_correlation" value="false"/>
+            <parameter key="cross-entropy" value="false"/>
+            <parameter key="margin" value="false"/>
+            <parameter key="soft_margin_loss" value="false"/>
+            <parameter key="logistic_loss" value="false"/>
+            <parameter key="skip_undefined_labels" value="true"/>
+            <parameter key="use_example_weights" value="true"/>
+            <list key="class_weights"/>
+          </operator>
+          <connect from_port="model" to_op="Apply Model" to_port="model"/>
+          <connect from_port="test set" to_op="Apply Model" to_port="unlabelled data"/>
+          <connect from_op="Apply Model" from_port="labelled data" to_op="Performance" to_port="labelled data"/>
+          <connect from_op="Performance" from_port="performance" to_port="performance 1"/>
+          <portSpacing port="source_model" spacing="0"/>
+          <portSpacing port="source_test set" spacing="0"/>
+          <portSpacing port="source_through 1" spacing="0"/>
+          <portSpacing port="sink_test set results" spacing="0"/>
+          <portSpacing port="sink_performance 1" spacing="0"/>
+          <portSpacing port="sink_performance 2" spacing="0"/>
+          <portSpacing port="sink_performance 3" spacing="0"/>
+          <description align="left" color="blue" colored="true" height="209" resized="true" width="263" x="15" y="17">&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; This operator applies the model we trained to predict the species of an animal.</description>
+          <description align="left" color="orange" colored="true" height="207" resized="true" width="272" x="299" y="18">&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; Now we calculate performance in terms of accuracy and classification error.</description>
+        </process>
+      </operator>
+      <connect from_op="Load Zoo dataset" from_port="output" to_op="Set Role" to_port="example set input"/>
+      <connect from_op="Set Role" from_port="example set output" to_op="Normalize" to_port="example set input"/>
+      <connect from_op="Normalize" from_port="example set output" to_op="Nominal to Numerical" to_port="example set input"/>
+      <connect from_op="Nominal to Numerical" from_port="example set output" to_op="Cross Validation" to_port="example set"/>
+      <connect from_op="Cross Validation" from_port="model" to_port="result 1"/>
+      <connect from_op="Cross Validation" from_port="example set" to_port="result 2"/>
+      <connect from_op="Cross Validation" from_port="test result set" to_port="result 3"/>
+      <connect from_op="Cross Validation" from_port="performance 1" to_port="result 4"/>
+      <connect from_op="Cross Validation" from_port="performance 2" to_port="result 5"/>
+      <portSpacing port="source_input 1" spacing="0"/>
+      <portSpacing port="sink_result 1" spacing="0"/>
+      <portSpacing port="sink_result 2" spacing="0"/>
+      <portSpacing port="sink_result 3" spacing="0"/>
+      <portSpacing port="sink_result 4" spacing="0"/>
+      <portSpacing port="sink_result 5" spacing="0"/>
+      <portSpacing port="sink_result 6" spacing="0"/>
+      <description align="left" color="yellow" colored="true" height="226" resized="true" width="262" x="33" y="115">Step 1:&lt;br&gt;We retrieve the zoo dataset using the &amp;quot;Read CSV&amp;quot; operator. Next we use the &amp;quot;Set Role&amp;quot; operator to set the &amp;quot;type&amp;quot; attribute as our label.</description>
+      <description align="left" color="purple" colored="true" height="97" resized="true" width="487" x="33" y="10">Objective :&lt;br&gt;To design a neural network based classification system to predict the species of an animal using the &amp;quot;Zoo&amp;quot; Dataset. We are going to use a K-fold validation strategy to judge the overall accuracy of our system.</description>
+      <description align="left" color="orange" colored="true" height="235" resized="true" width="219" x="305" y="116">Step 2:&lt;br&gt;We normalize the only numerical attribute 'legs' using the Z-transformation method.</description>
+      <description align="left" color="gray" colored="true" height="239" resized="true" width="239" x="33" y="351">&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; Step 3:&lt;br&gt;Next we convert our polynomial attributes to numerical values.&lt;br&gt;</description>
+      <description align="left" color="green" colored="true" height="234" resized="true" width="422" x="282" y="352">&lt;br&gt; &lt;br&gt; &lt;br&gt; &lt;br&gt; Step 4:&lt;br&gt;We use a cross-validation operator with a deep&lt;br&gt;learning model having a K-fold validation&lt;br&gt;strategy to calculate the performance of our&lt;br&gt;model in terms of accuracy and classification&lt;br/&gt;error. We keep k=5 for maximum accuracy.</description>
+      <description align="left" color="yellow" colored="false" height="334" resized="true" width="113" x="528" y="10">Outputs :&lt;br&gt;- The trained deep learning model to predict the species of an animal.&lt;br&gt;- The example set and test result set.&lt;br&gt;- Performance metrics in terms of accuracy and classification error.</description>
+      <description align="left" color="gray" colored="true" height="330" resized="true" width="103" x="648" y="10">NOTE:&lt;br&gt;I found that increasing K beyong 5, decreases and then stabilizes the accuracy of the system around 95.00 -96.00 % even if we increase the epochs parameter.</description>
+      <description align="left" color="gray" colored="true" height="329" resized="true" width="103" x="757" y="10">OBSERVATIONS:&lt;br&gt;No. of folds : Accuracy&lt;br&gt;2 : 96.02%&lt;br&gt;3 : 97.03%&lt;br&gt;4 : 97.04%&lt;br&gt;5 : 97.14%&lt;br&gt;6 : 96.08%&lt;br&gt;7 : 94.22%&lt;br&gt;8 : 95.11%&lt;br&gt;9 : 95.12%&lt;br&gt;10 : 96.00%&lt;br&gt;12: 95.02%&lt;br&gt;15 : 95.01%&lt;br&gt;20 : 95.00%</description>
+    </process>
+  </operator>
+</process>
